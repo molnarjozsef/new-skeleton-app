@@ -24,7 +24,7 @@ fun DetailsScreen(item: StateFlow<Article?>) {
         modifier = Modifier.fillMaxSize(),
     ) {
         Row {
-            GlideImage(imageModel = article.value?.urlToImage ?: "", modifier = Modifier.width(160.dp))
+            GlideImage(imageModel = { article.value?.urlToImage ?: "" }, modifier = Modifier.width(160.dp))
             Column {
                 Text(text = article.value?.title ?: "TITLE")
                 Text(text = article.value?.description ?: "DESCRIPTION")

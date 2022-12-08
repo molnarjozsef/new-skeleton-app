@@ -5,7 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.jozsefmolnar.newskeletonapp.BR
 import com.jozsefmolnar.newskeletonapp.R
@@ -47,6 +47,6 @@ class MainFragment :
 
     override fun onItemClicked(item: Article) {
         val bundle = bundleOf("articleId" to item.id)
-        findNavController(this).navigate(R.id.action_mainFragment_to_detailsFragment, bundle)
+        findNavController(this.requireView()).navigate(R.id.action_mainFragment_to_detailsFragment, bundle)
     }
 }
