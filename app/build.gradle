@@ -125,6 +125,9 @@ dependencies {
 
     implementation "com.github.skydoves:landscapist-glide:2.1.0"
 
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.2'
 }
