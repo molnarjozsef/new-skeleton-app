@@ -1,4 +1,4 @@
-package com.jozsefmolnar.newskeletonapp
+package com.jozsefmolnar.newskeletonapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -6,9 +6,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.jozsefmolnar.newskeletonapp.navigation.DetailsScreen
-import com.jozsefmolnar.newskeletonapp.navigation.MainScreen
-import com.jozsefmolnar.newskeletonapp.navigation.Screen
 import com.jozsefmolnar.newskeletonapp.ui.model.DetailsViewModel
 import com.jozsefmolnar.newskeletonapp.ui.model.MainViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,15 +14,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 fun Navigation() {
     val navController = androidx.navigation.compose.rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+
+    NavHost(
+        navController = navController,
+        startDestination = Screen.MainScreen.route,
+    ) {
         composable(route = Screen.MainScreen.route) {
             val viewModel = hiltViewModel<MainViewModel>()
             MainScreen(
-                data = viewModel.items,
-                refresh = { viewModel.fetchLatestNews() },
+                viewModel = viewModel,
                 onNewsItemClicked = { navController.navigate(Screen.DetailsScreen.withArgs(it.id!!)) },
             )
         }
+
         composable(route = Screen.DetailsScreen.route + "/{id}",
             arguments = listOf(
                 navArgument("id") {
@@ -36,7 +37,11 @@ fun Navigation() {
         ) { entry ->
             val viewModel = hiltViewModel<DetailsViewModel>()
             viewModel.setArticleId(entry.arguments?.getInt("id")!!)
-            DetailsScreen(viewModel.article)
+
+            DetailsScreen(
+                viewModel = viewModel,
+                navigateUp = navController::navigateUp
+            )
         }
     }
 }

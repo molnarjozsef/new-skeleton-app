@@ -13,15 +13,15 @@ class MainViewModel @Inject constructor(
 
     val items = repository.getCachedNews().asStateFlow()
 
+    init {
+        fetchLatestNews()
+    }
+
     fun fetchLatestNews() {
         viewModelScope.launch {
             trackProgress {
                 repository.fetchLatestNews()
             }
         }
-    }
-
-    init {
-        fetchLatestNews()
     }
 }

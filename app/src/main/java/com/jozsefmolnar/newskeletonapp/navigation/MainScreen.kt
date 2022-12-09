@@ -1,46 +1,51 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLifecycleComposeApi::class)
 
 package com.jozsefmolnar.newskeletonapp.navigation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.*
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.jozsefmolnar.newskeletonapp.NewsHomeContent
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jozsefmolnar.newskeletonapp.ArticleList
 import com.jozsefmolnar.newskeletonapp.model.domain.Article
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import com.jozsefmolnar.newskeletonapp.ui.model.MainViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun MainScreen(
-    data: StateFlow<List<Article>?>,
-    refresh: () -> Unit,
+    viewModel: MainViewModel,
     onNewsItemClicked: (Article) -> Unit,
 ) {
-    val info = data.map { it?.firstOrNull()?.content ?: "emptyness" }.collectAsState("initial")
-    val articles = data.collectAsState()
-    var text by remember {
-        mutableStateOf("")
-    }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        TextField(
-            value = text,
-            onValueChange = {
-                text = it
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = info.value)
-        NewsHomeContent(
-            articles = articles.value ?: emptyList(),
-            onNewsItemClicked = onNewsItemClicked,
-        )
+    val articles by viewModel.items.collectAsStateWithLifecycle()
+
+    MainScreenContent(
+        articles = articles?.toPersistentList(),
+        onNewsItemClicked = onNewsItemClicked
+    )
+}
+
+@Composable
+fun MainScreenContent(
+    articles: ImmutableList<Article>?,
+    onNewsItemClicked: (Article) -> Unit,
+) {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("News") }) }
+    ) { contentPadding ->
+        Column(Modifier.padding(contentPadding)) {
+
+            ArticleList(
+                articles = articles,
+                onNewsItemClicked = onNewsItemClicked,
+            )
+        }
     }
 }
