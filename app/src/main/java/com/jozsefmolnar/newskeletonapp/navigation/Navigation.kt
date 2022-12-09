@@ -21,9 +21,9 @@ fun Navigation() {
         composable(route = Screen.MainScreen.route) {
             val viewModel = hiltViewModel<MainViewModel>()
             MainScreen(
-                navController = navController,
-                { viewModel.fetchLatestNews() },
-                viewModel.items
+                data = viewModel.items,
+                refresh = { viewModel.fetchLatestNews() },
+                onNewsItemClicked = { navController.navigate(Screen.DetailsScreen.withArgs(it.id!!)) },
             )
         }
         composable(route = Screen.DetailsScreen.route + "/{id}",
