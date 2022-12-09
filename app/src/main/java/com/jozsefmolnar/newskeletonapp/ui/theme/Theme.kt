@@ -15,7 +15,7 @@ private val LightColorPalette = lightColorScheme(
 )
 
 @Composable
-fun NewSkeletonAppTheme(
+fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {

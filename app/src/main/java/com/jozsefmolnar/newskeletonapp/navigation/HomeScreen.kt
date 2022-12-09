@@ -15,25 +15,25 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jozsefmolnar.newskeletonapp.ArticleList
 import com.jozsefmolnar.newskeletonapp.model.domain.Article
-import com.jozsefmolnar.newskeletonapp.ui.model.MainViewModel
+import com.jozsefmolnar.newskeletonapp.ui.model.HomeViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel,
+fun HomeScreen(
+    viewModel: HomeViewModel,
     onNewsItemClicked: (Article) -> Unit,
 ) {
     val articles by viewModel.items.collectAsStateWithLifecycle()
 
-    MainScreenContent(
+    HomeScreenContent(
         articles = articles?.toPersistentList(),
         onNewsItemClicked = onNewsItemClicked
     )
 }
 
 @Composable
-fun MainScreenContent(
+fun HomeScreenContent(
     articles: ImmutableList<Article>?,
     onNewsItemClicked: (Article) -> Unit,
 ) {
